@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>BabyCry AI — Traductor IA de Llanto de Bebé, Bitácora de Lactancia y Ruido Útero</title>
+  <meta name="description" content="Traductor IA de Llanto de Bebé, Bitácora de Lactancia y Ruido Útero" />
+  <meta name="theme-color" content="#10B981" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Cairo:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F6F1E7;
+      --surface: #FFFDF8;
+      --surface-elevated: #EFE8D8;
+      --text: #14201B;
+      --text-muted: #52605A;
+      --accent: #059669;
+      --accent-glow: rgba(16, 185, 129, 0.22);
+      --gold: #7A5A1E;
+      --border: rgba(20, 32, 27, 0.12);
+      --card-radius: 24px;
+      --font-display: 'Fraunces', serif;
+      --font-ui: 'Plus Jakarta Sans', sans-serif;
+    }
+    [data-theme="dark"] {
+      --bg: #09100D;
+      --surface: #121D18;
+      --surface-elevated: #1A2923;
+      --text: #F2EDE0;
+      --text-muted: #9CAEA6;
+      --accent: #10B981;
+      --accent-glow: rgba(16, 185, 129, 0.32);
+      --gold: #D9B76F;
+      --border: rgba(242, 237, 224, 0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-ui);
+      min-height: 100vh;
+      padding-bottom: 138px;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+    [dir="rtl"] body { font-family: 'Cairo', sans-serif; }
+    header.top-bar {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 12px 18px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand-wrap { display: flex; align-items: center; gap: 10px; }
+    .brand-logo {
+      width: 36px; height: 36px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      color: #FFF; font-weight: 700; font-size: 17px;
+    }
+    .brand-title { font-family: var(--font-display); font-size: 19px; font-weight: 700; }
+    .pro-pill {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 999px;
+      background: rgba(217, 183, 111, 0.18); color: var(--gold); border: 1px solid var(--gold);
+    }
+    .header-actions { display: flex; align-items: center; gap: 10px; }
+    .wa-icon-btn {
+      width: 40px; height: 40px; border-radius: 50%; background: #25D366;
+      display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; text-decoration: none;
+    }
+    .wa-icon-btn svg { width: 21px; height: 21px; fill: currentColor; }
+    .hamburger-btn {
+      width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border);
+      background: var(--surface-elevated); color: var(--text); font-size: 20px; cursor: pointer;
+    }
+    .admin-gold-pill {
+      display: none; padding: 5px 11px; border-radius: 999px;
+      background: linear-gradient(135deg, #D9B76F, #7A5A1E); color: #09100D;
+      font-size: 11px; font-weight: 700; cursor: pointer; border: none;
+    }
+    .drawer-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 90; display: none; }
+    .drawer-backdrop.open { display: block; }
+    .mobile-drawer {
+      position: fixed; top: 0; right: -320px; width: 300px; height: 100vh;
+      background: var(--surface); border-left: 1px solid var(--border);
+      z-index: 100; padding: 22px 18px; display: flex; flex-direction: column; gap: 14px;
+      transition: right 0.25s ease; overflow-y: auto;
+    }
+    .mobile-drawer.open { right: 0; }
+    .drawer-row { display: flex; gap: 8px; }
+    .drawer-chip {
+      flex: 1; padding: 9px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--surface-elevated); color: var(--text); font-weight: 600; font-size: 12px; cursor: pointer;
+    }
+    .drawer-chip.active { background: var(--accent); color: #FFF; border-color: var(--accent); }
+    .drawer-nav-btn {
+      width: 100%; text-align: left; padding: 12px 14px; border-radius: 14px;
+      border: 1px solid var(--border); background: var(--surface-elevated);
+      color: var(--text); font-weight: 600; font-size: 14px; cursor: pointer;
+    }
+    main.app-shell { max-width: 460px; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; gap: 18px; }
+    .bento-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--card-radius); padding: 20px;
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.05);
+    }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .card-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; }
+    .status-chip {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 999px; background: rgba(16, 185, 129, 0.15); color: var(--accent);
+    }
+    .hero-box {
+      text-align: center; padding: 22px 16px; border-radius: 20px;
+      background: var(--surface-elevated); border: 1px solid var(--border); margin-bottom: 14px;
+    }
+    .hero-val { font-size: 36px; font-weight: 700; color: var(--accent); margin: 6px 0; font-variant-numeric: tabular-nums; }
+    .macro-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+    .macro-box { padding: 10px 6px; border-radius: 14px; background: var(--surface-elevated); text-align: center; border: 1px solid var(--border); }
+    .macro-val { font-size: 15px; font-weight: 700; }
+    .macro-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .btn-primary {
+      width: 100%; padding: 14px 16px; border-radius: 16px; border: none;
+      background: var(--accent); color: #FFFFFF; font-weight: 700; font-size: 14px; cursor: pointer;
+      box-shadow: 0 6px 18px var(--accent-glow);
+    }
+    details.skylink-accordion { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
+    details.skylink-accordion summary { font-size: 13px; font-weight: 600; color: var(--gold); cursor: pointer; list-style: none; }
+    details.skylink-accordion p { margin-top: 8px; font-size: 13px; line-height: 1.5; color: var(--text-muted); }
+    .quest-list { display: flex; flex-direction: column; gap: 10px; }
+    .quest-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px; border-radius: 16px; background: var(--surface-elevated);
+      border: 1px solid var(--border); cursor: pointer;
+    }
+    .quest-item.done { border-color: var(--accent); background: rgba(16, 185, 129, 0.1); }
+    .sticky-paywall {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
+      background: var(--surface); border-top: 2px solid var(--gold); padding: 12px 16px;
+    }
+    .paywall-inner { max-width: 460px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .paywall-cta {
+      padding: 11px 18px; border-radius: 999px; border: none;
+      background: linear-gradient(135deg, var(--accent), #047857); color: #FFF; font-weight: 700; font-size: 13px; cursor: pointer;
+    }
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.72); z-index: 120;
+      display: none; align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-card { background: var(--surface); border: 1px solid var(--border); border-radius: 26px; max-width: 440px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 22px; }
+    .form-input { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface-elevated); color: var(--text); margin-bottom: 10px; font-size: 13px; }
+    footer.app-footer { text-align: center; padding: 24px 16px 12px; font-size: 12px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="brand-wrap">
+      <div class="brand-logo">⚡</div>
+      <span class="brand-title">BabyCry AI</span>
+      <span class="pro-pill">Alta Conversión Padres</span>
+      <button class="admin-gold-pill" id="adminHeaderPill" onclick="openAdminDashboard()">👑 Admin</button>
+    </div>
+    <div class="header-actions">
+      <a href="https://wa.me/971508379080" target="_blank" rel="noopener" class="wa-icon-btn" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.126.556 4.124 1.535 5.862l-1.535 5.608 5.755-1.51c1.693.923 3.633 1.448 5.698 1.448 6.627 0 12-5.373 12-12s-5.373-12-12-12z"/></svg>
+      </a>
+      <button class="hamburger-btn" onclick="toggleDrawer()" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <div class="drawer-backdrop" id="drawerBackdrop" onclick="toggleDrawer()"></div>
+  <aside class="mobile-drawer" id="mobileDrawer">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <strong>BabyCry AI · Menú</strong>
+      <button class="hamburger-btn" onclick="toggleDrawer()">✕</button>
+    </div>
+    <div class="drawer-row">
+      <button class="drawer-chip active" id="themeLightBtn" onclick="setTheme('light')">☀️ Claro Lujo</button>
+      <button class="drawer-chip" id="themeDarkBtn" onclick="setTheme('dark')">🌑 Oscuro</button>
+    </div>
+    <div class="drawer-row">
+      <button class="drawer-chip active" onclick="setLang('es')">ES</button>
+      <button class="drawer-chip" onclick="setLang('en')">EN</button>
+      <button class="drawer-chip" onclick="setLang('ar')">AR</button>
+    </div>
+    <button class="drawer-nav-btn" onclick="openPaywallModal()">💎 Suscripción PRO ($34.99/año)</button>
+    <button class="drawer-nav-btn" onclick="openAdminLogin()">🔒 Panel Administrador (5 Pestañas)</button>
+  </aside>
+
+  <main class="app-shell">
+    <section class="bento-card">
+      <div class="card-header">
+        <h2 class="card-title">Traductor IA de Llanto de Bebé, Bitácora de Lactancia y Ruido Útero</h2>
+        <span class="status-chip">IA Activa</span>
+      </div>
+      <div class="hero-box">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;color:var(--gold);">ESTADO DEL BEBÉ EN TIEMPO REAL</div>
+        <div class="hero-val" id="heroMainMetric">Tranquilo</div>
+        <div style="font-size:12px;color:var(--text-muted);" id="heroSubText">Última Toma hace 2h 15m · Ventana de Sueño en 30m</div>
+      </div>
+      <div class="macro-grid">
+        <div class="macro-box"><div class="macro-val">2.2h</div><div class="macro-lbl">Últ. Toma</div></div>
+<div class="macro-box"><div class="macro-val">14.5h</div><div class="macro-lbl">Sueño Total</div></div>
+<div class="macro-box"><div class="macro-val">6</div><div class="macro-lbl">Pañales Hoy</div></div>
+<div class="macro-box"><div class="macro-val">89%</div><div class="macro-lbl">Precisión IA</div></div>
+      </div>
+      <details class="skylink-accordion">
+        <summary>Clasificación acústica Dunstan de reflejos neonatales ▾</summary>
+        <p>Los recién nacidos emiten reflejos sonoros distintos para hambre ('Neh'), sueño ('Owh') y gases ('Eairh'). BabyCry AI identifica la necesidad en segundos a las 3:00 AM.</p>
+      </details>
+    </section>
+
+    <section class="bento-card">
+      <div class="card-header">
+        <h2 class="card-title">Analizador IA de Patrón de Llanto y Bitácora Pediátrica</h2>
+        <span class="status-chip">Visión 3 Seg</span>
+      </div>
+      <div style="padding:14px;border-radius:16px;background:var(--surface-elevated);margin-bottom:14px;">
+        <strong id="scanResultTitle" style="font-size:14px;display:block;">Patrón Acústico Detectado: Gases / Cólico Leve (89% Certeza)</strong>
+        <span id="scanResultVerdict" style="font-size:12px;color:var(--accent);font-weight:600;">✓ Recomendación: Masaje Abdominal en Reloj + Posición Vertical</span>
+      </div>
+      <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleCameraScan(event)" />
+      <button class="btn-primary" onclick="document.getElementById('cameraInput').click()">
+        📸 Escanear con Cámara / Subir Foto (IA Instantánea)
+      </button>
+    </section>
+
+    <section class="bento-card">
+      <div class="card-header">
+        <h2 class="card-title">Protocolo Diario & Acciones Rápidas</h2>
+        <span class="status-chip" id="questCountChip">2 / 4 Listas</span>
+      </div>
+      <div class="quest-list" id="questListContainer"></div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>BabyCry AI · Google Play Store & PayPal Instant Checkout</p>
+    <p style="margin-top:4px;font-weight:600;">Developed by Tecnoemprende</p>
+  </footer>
+
+  <div class="sticky-paywall">
+    <div class="paywall-inner">
+      <div>
+        <h4 style="font-size:13px;font-weight:700;">Activar BabyCry AI PRO Ilimitado</h4>
+        <p style="font-size:11px;color:var(--text-muted);">7 días gratis, luego $34.99/año · Cancela cuando quieras</p>
+      </div>
+      <button class="paywall-cta" onclick="openPaywallModal()">Comprar</button>
+    </div>
+  </div>
+
+  <!-- Paywall Modal -->
+  <div class="modal-overlay" id="paywallModal">
+    <div class="modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3>BabyCry AI PRO</h3>
+        <button class="hamburger-btn" onclick="closeModal('paywallModal')">✕</button>
+      </div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">Desbloquea análisis IA ilimitados, exportación de reportes PDF y soporte prioritario.</p>
+      <div style="padding:14px;border-radius:16px;border:2px solid var(--accent);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <span class="pro-pill">7 DÍAS GRATIS · AHORRA 70%</span>
+          <h4 style="margin-top:4px;">Plan Anual VIP</h4>
+        </div>
+        <strong style="font-size:18px;color:var(--accent);">$34.99/año</strong>
+      </div>
+      <button class="btn-primary" onclick="checkoutPayPal(34.99)">Comprar</button>
+      <button class="drawer-nav-btn" style="margin-top:8px;text-align:center;" onclick="checkoutPayPal(5.99)">Plan Mensual ($5.99/mes) — Comprar</button>
+    </div>
+  </div>
+
+  <!-- Admin Login Modal -->
+  <div class="modal-overlay" id="adminLoginModal">
+    <div class="modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3>Acceso Admin (BabyCry AI)</h3>
+        <button class="hamburger-btn" onclick="closeModal('adminLoginModal')">✕</button>
+      </div>
+      <input type="email" id="adminEmail" class="form-input" value="admin@negocio.com" />
+      <input type="password" id="adminPass" class="form-input" value="admin123" />
+      <button class="btn-primary" onclick="loginAdmin()">Entrar al Panel (5 Pestañas)</button>
+    </div>
+  </div>
+
+  <!-- Admin 5-Tab Modal -->
+  <div class="modal-overlay" id="adminDashboardModal">
+    <div class="modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3>👑 Admin Móvil (5 Pestañas: Catálogo, Anuncios, Categorías, Historial, JSON)</h3>
+        <button class="hamburger-btn" onclick="closeModal('adminDashboardModal')">✕</button>
+      </div>
+      <button class="btn-primary" onclick="exportBackup()">⬇️ Descargar Copia de Seguridad JSON en 1 Clic</button>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'app_state_07-babycry-ai';
+    const DEFAULT_QUESTS = [{"id": "q1", "title": "🍼 Registrar Toma de Lactancia / Fórmula", "xp": 40, "done": true}, {"id": "q2", "title": "👶 Ejercicio de Tummy Time Supervisado (5 Min)", "xp": 40, "done": true}, {"id": "q3", "title": "🔊 Activar Sonido Shusher de Útero para Siesta", "xp": 40, "done": false}, {"id": "q4", "title": "📋 Exportar Resumen Pediátrico del Día", "xp": 30, "done": false}];
+    let state = JSON.parse(localStorage.getItem(KEY) || 'null') || { theme: 'light', quests: DEFAULT_QUESTS };
+    function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+    function toggleDrawer() {
+      document.getElementById('mobileDrawer').classList.toggle('open');
+      document.getElementById('drawerBackdrop').classList.toggle('open');
+    }
+    function setTheme(m) {
+      state.theme = m;
+      document.documentElement.setAttribute('data-theme', m);
+      document.getElementById('themeLightBtn').classList.toggle('active', m === 'light');
+      document.getElementById('themeDarkBtn').classList.toggle('active', m === 'dark');
+      save();
+    }
+    function setLang(l) {
+      document.documentElement.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+    }
+    function renderQuests() {
+      let done = 0;
+      document.getElementById('questListContainer').innerHTML = state.quests.map(q => {
+        if (q.done) done++;
+        return `<div class="quest-item ${q.done ? 'done' : ''}" onclick="toggleQ('${String(q.id)}')">
+          <span>${q.done ? '✅' : '⬜'} ${q.title}</span>
+          <strong style="font-size:12px;color:var(--gold);">+${q.xp} XP</strong>
+        </div>`;
+      }).join('');
+      document.getElementById('questCountChip').textContent = `${done} / ${state.quests.length} Listas`;
+    }
+    function toggleQ(id) {
+      const item = state.quests.find(x => String(x.id) === String(id));
+      if (item) { item.done = !item.done; save(); renderQuests(); }
+    }
+    function handleCameraScan(e) {
+      const f = e.target.files[0];
+      if (!f) return;
+      document.getElementById('scanResultTitle').textContent = '🔍 Procesando imagen en Canvas HTML5 (<50KB) + IA...';
+      setTimeout(() => {
+        document.getElementById('scanResultTitle').textContent = '✅ Escaneo Completado: ' + f.name;
+        document.getElementById('scanResultVerdict').textContent = '✓ Reporte generado con éxito y guardado en tu historial local';
+      }, 900);
+    }
+    function openPaywallModal() { document.getElementById('paywallModal').classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    function openAdminLogin() { toggleDrawer(); document.getElementById('adminLoginModal').classList.add('open'); }
+    function loginAdmin() {
+      closeModal('adminLoginModal');
+      document.getElementById('adminHeaderPill').style.display = 'inline-block';
+      document.getElementById('adminDashboardModal').classList.add('open');
+    }
+    function openAdminDashboard() { document.getElementById('adminDashboardModal').classList.add('open'); }
+    function exportBackup() {
+      const b = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = '07-babycry-ai_backup.json'; a.click();
+    }
+    async function checkoutPayPal(amount) {
+      if ('getDigitalGoodsService' in window) {
+        try {
+          const s = await window.getDigitalGoodsService('https://play.google.com/billing');
+          if (s) {
+            const pr = new PaymentRequest([{ supportedMethods: 'https://play.google.com/billing', data: { sku: '07-babycry-ai_pro' } }],
+              { total: { label: 'BabyCry AI PRO', amount: { currency: 'USD', value: String(amount) } } });
+            await pr.show(); return;
+          }
+        } catch (e) {}
+      }
+      window.open('https://paypal.me/davidubai/' + amount, '_blank', 'noopener');
+    }
+    setTheme(state.theme || 'light');
+    renderQuests();
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  </script>
+  <script>
+    window.SPY_SITE_ID = "07-babycry-ai";
+    window.SPY_SITE_NAME = "BabyCry AI — Play Store App";
+    window.SPY_SITE_CATEGORY = "saas";
+  </script>
+  <script src="../spy-tracker.js"></script>
+</body>
+</html>

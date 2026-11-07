@@ -1,0 +1,14 @@
+{
+  "packageId": "com.tecnoemprende.stoicgraceai",
+  "host": "cubaloop.github.io",
+  "name": "StoicGrace AI",
+  "launcherName": "StoicGrace AI",
+  "display": "standalone",
+  "themeColor": "#10B981",
+  "startUrl": "/playstore-apps-suite-2026/02-stoicgrace-ai/",
+  "features": {
+    "playBilling": {
+      "enabled": true
+    }
+  }
+}

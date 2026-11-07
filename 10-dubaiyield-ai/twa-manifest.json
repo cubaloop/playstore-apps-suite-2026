@@ -1,0 +1,14 @@
+{
+  "packageId": "com.tecnoemprende.dubaiyieldai",
+  "host": "cubaloop.github.io",
+  "name": "DubaiYield AI",
+  "launcherName": "DubaiYield AI",
+  "display": "standalone",
+  "themeColor": "#10B981",
+  "startUrl": "/playstore-apps-suite-2026/10-dubaiyield-ai/",
+  "features": {
+    "playBilling": {
+      "enabled": true
+    }
+  }
+}

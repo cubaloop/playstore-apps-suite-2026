@@ -1,0 +1,14 @@
+{
+  "packageId": "com.tecnoemprende.plantdocai",
+  "host": "cubaloop.github.io",
+  "name": "PlantDoc AI",
+  "launcherName": "PlantDoc AI",
+  "display": "standalone",
+  "themeColor": "#10B981",
+  "startUrl": "/playstore-apps-suite-2026/06-plantdoc-ai/",
+  "features": {
+    "playBilling": {
+      "enabled": true
+    }
+  }
+}

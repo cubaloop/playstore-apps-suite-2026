@@ -1,0 +1,14 @@
+{
+  "packageId": "com.tecnoemprende.cardiogluai",
+  "host": "cubaloop.github.io",
+  "name": "CardioGlu AI",
+  "launcherName": "CardioGlu AI",
+  "display": "standalone",
+  "themeColor": "#10B981",
+  "startUrl": "/playstore-apps-suite-2026/08-cardioglu-ai/",
+  "features": {
+    "playBilling": {
+      "enabled": true
+    }
+  }
+}

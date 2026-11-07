@@ -1,0 +1,14 @@
+{
+  "packageId": "com.tecnoemprende.sleepwaveai",
+  "host": "cubaloop.github.io",
+  "name": "SleepWave AI",
+  "launcherName": "SleepWave AI",
+  "display": "standalone",
+  "themeColor": "#10B981",
+  "startUrl": "/playstore-apps-suite-2026/04-sleepwave-ai/",
+  "features": {
+    "playBilling": {
+      "enabled": true
+    }
+  }
+}

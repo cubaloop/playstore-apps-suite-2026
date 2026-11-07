@@ -1,0 +1,14 @@
+{
+  "packageId": "com.tecnoemprende.dermlensai",
+  "host": "cubaloop.github.io",
+  "name": "DermLens AI",
+  "launcherName": "DermLens AI",
+  "display": "standalone",
+  "themeColor": "#10B981",
+  "startUrl": "/playstore-apps-suite-2026/03-dermlens-ai/",
+  "features": {
+    "playBilling": {
+      "enabled": true
+    }
+  }
+}

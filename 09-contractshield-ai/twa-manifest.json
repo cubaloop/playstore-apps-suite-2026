@@ -1,0 +1,14 @@
+{
+  "packageId": "com.tecnoemprende.contractshieldai",
+  "host": "cubaloop.github.io",
+  "name": "ContractShield AI",
+  "launcherName": "ContractShield AI",
+  "display": "standalone",
+  "themeColor": "#10B981",
+  "startUrl": "/playstore-apps-suite-2026/09-contractshield-ai/",
+  "features": {
+    "playBilling": {
+      "enabled": true
+    }
+  }
+}

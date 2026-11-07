@@ -1,0 +1,14 @@
+{
+  "packageId": "com.tecnoemprende.subkillai",
+  "host": "cubaloop.github.io",
+  "name": "SubKill AI",
+  "launcherName": "SubKill AI",
+  "display": "standalone",
+  "themeColor": "#10B981",
+  "startUrl": "/playstore-apps-suite-2026/01-subkill-ai/",
+  "features": {
+    "playBilling": {
+      "enabled": true
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "packageId": "com.tecnoemprende.petvetai",
+  "host": "cubaloop.github.io",
+  "name": "PetVet AI",
+  "launcherName": "PetVet AI",
+  "display": "standalone",
+  "themeColor": "#10B981",
+  "startUrl": "/playstore-apps-suite-2026/05-petvet-ai/",
+  "features": {
+    "playBilling": {
+      "enabled": true
+    }
+  }
+}

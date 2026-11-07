@@ -1,0 +1,14 @@
+{
+  "packageId": "com.tecnoemprende.babycryai",
+  "host": "cubaloop.github.io",
+  "name": "BabyCry AI",
+  "launcherName": "BabyCry AI",
+  "display": "standalone",
+  "themeColor": "#10B981",
+  "startUrl": "/playstore-apps-suite-2026/07-babycry-ai/",
+  "features": {
+    "playBilling": {
+      "enabled": true
+    }
+  }
+}
